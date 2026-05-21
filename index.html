@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UN Agent — Security Architecture (P3)</title>
+<meta name="description" content="UN Agent: Quality Attributes, Part 1 — architecture presentation, Team 1D.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<header class="topbar">
+  <div class="brand"><span class="brand-dot"></span><span>UN Agent · Prototype 3</span></div>
+  <div class="topbar-right">
+    <span class="counter"><span id="cur">1</span> / <span id="tot">1</span></span>
+    <button class="icon-btn" id="menuBtn" aria-label="Slide overview"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main class="deck" id="deck">
+
+  <!-- 1. TITLE -->
+  <section class="slide" data-kind="title" data-title="UN Agent">
+    <div class="slide-inner"><div class="slide-body">
+      <img class="hero-logo" src="images/image15.png" alt="UN Agent logo">
+      <h1>UN Agent</h1>
+      <p class="hero-sub">Asesores en Salud</p>
+      <p class="hero-line">Prototype 3 · Quality Attributes, Part 1</p>
+      <p class="hero-meta">Software Architecture · 2026-I · Universidad Nacional de Colombia · Team 1D</p>
+    </div></div>
+  </section>
+
+  <!-- 2. WHAT IT IS -->
+  <section class="slide" data-kind="content" data-title="What is UN Agent">
+    <div class="slide-inner"><div class="slide-body">
+      <span class="eyebrow">01 · Software System</span>
+      <h2>What is UN Agent</h2>
+      <p>A multi-tenant conversational-AI platform that automates patient-facing
+      appointment scheduling. Patients talk to an AI agent through a web console
+      or a Telegram bot; the agent runs a tool-calling loop against a hospital
+      scheduling API and streams replies token-by-token.</p>
+      <ul class="keypoints">
+        <li><b>Polyglot microservices</b> — 8 services in Rust, Go, Python, TypeScript and Java.</li>
+        <li><b>Single entry point</b> — a Rust orchestrator (<code>chat-orch</code>) acting as Backend-for-Frontend.</li>
+        <li><b>Isolated by design</b> — five dedicated Docker networks (Network Segmentation).</li>
+        <li><b>Encrypted internally</b> — every inter-service hop sealed with AES-256-GCM.</li>
+      </ul>
+    </div></div>
+  </section>
+
+  <!-- 3. TEAM -->
+  <section class="slide" data-kind="content" data-title="Team 1D">
+    <div class="slide-inner"><div class="slide-body">
+      <span class="eyebrow">Group 1D</span>
+      <h2>The team</h2>
+      <div class="team-grid">
+        <div class="team-card"><b>Juan David Loaiza Reyes</b><span>Orchestrator — chat-orch (Rust)</span></div>
+        <div class="team-card"><b>Víctor Daniel Díaz Reyes</b><span>Tenant (Go) · Compliance (Python)</span></div>
+        <div class="team-card"><b>Nicolás Zuluaga Galindo</b><span>Tenant Service (Go)</span></div>
+        <div class="team-card"><b>Manuel Eduardo Díaz Sabogal</b><span>Tenant &amp; Frontend (Go / TypeScript)</span></div>
+        <div class="team-card"><b>Daniel Libardo Díaz González</b><span>Conversation-Chat (Go) · Agent Runtime (TS)</span></div>
+        <div class="team-card"><b>Julián Andrés Vaquiro Moreno</b><span>Frontend (TypeScript) · Email Service (Java)</span></div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- 4. C&C VIEW -->
+  <section class="slide" data-kind="content" data-title="Component &amp; Connector view">
+    <div class="slide-inner"><div class="slide-body">
+      <span class="eyebrow">02 · Architectural Structures</span>
+      <h2>Component &amp; Connector view</h2>
+      <figure class="media"><img src="images/image13.png" alt="Component and connector diagram"></figure>
+      <ul class="keypoints cols-2">
+        <li><b>Frontend + NGINX</b> — single public origin: static SPA and reverse proxy.</li>
+        <li><b>chat-orch (Rust)</b> — coordinates every chat turn as the BFF.</li>
+        <li><b>agent-runtime / conversation-chat</b> — tool-calling loop and session state.</li>
+        <li><b>Connectors</b> — HTTP/REST, SSE streaming, RabbitMQ pub/sub, private DB bindings.</li>
+      </ul>
+    </div></div>
+  </section>
+
+  <!-- 5. LAYERED VIEW -->
+  <section class="slide" data-kind="content" data-title="Layered view">
+    <div class="slide-inner"><div class="slide-body">
+      <span class="eyebrow">02 · Architectural Structures</span>
+      <h2>Layered view</h2>
+      <figure class="media"><img src="images/image9.png" alt="Layered tier diagram"></figure>
+      <ul class="keypoints cols-2">
+        <li><b>T1 Presentation</b> — web app and Telegram clients.</li>
+        <li><b>T2 Connection</b> — the orchestrator routes every request.</li>
+        <li><b>T3 Logic</b> — the eight microservices and the message broker.</li>
+        <li><b>T4 Data</b> — each service owns its private store.</li>
+      </ul>
+    </div></div>
+  </section>
+
+  <!-- 6. DECOMPOSITION VIEW -->
+  <section class="slide" data-kind="content" data-title="Decomposition view">
+    <div class="slide-inner"><div class="slide-body">
+      <span class="eyebrow">02 · Architectural Structures</span>
+      <h2>Decomposition view</h2>
+      <figure class="media"><img src="images/image8.png" alt="Module decomposition diagram"></figure>
+      <ul class="keypoints cols-2">
+        <li><b>Per-service modules</b> — each microservice broken into cohesive units.</li>
+        <li><b>Clear ownership</b> — responsibilities mapped module by module.</li>
+        <li><b>Low coupling</b> — modules communicate only through defined interfaces.</li>
+        <li><b>Database per service</b> — no shared monolithic schema.</li>
+      </ul>
+    </div></div>
+  </section>
+
+  <!-- 7. DEPLOYMENT -->
+  <section class="slide" data-kind="content" data-title="Deployment view">
+    <div class="slide-inner"><div class="slide-body">
+      <span class="eyebrow">02 · Architectural Structures</span>
+      <h2>Deployment view</h2>
+      <figure class="media tall"><img src="images/image11.png" alt="Deployment diagram"></figure>
+      <ul class="keypoints cols-2">
+        <li><b>Single host</b> — one Docker container per service and datastore.</li>
+        <li><b>Five networks</b> — public, orchestrator, tenant, compliance, db.</li>
+        <li><b>External clouds</b> — Telegram, OpenRouter and SendGrid over WAN.</li>
+        <li><b>Container-based</b> — isolation and independent deployment per unit.</li>
+      </ul>
+    </div></div>
+  </section>
+
+  <!-- 8. SECURITY OVERVIEW -->
+  <section class="slide" data-kind="content" data-title="Four security countermeasures">
+    <div class="slide-inner"><div class="slide-body">
+      <span class="eyebrow">03 · Quality Attributes — Security</span>
+      <h2>Four security countermeasures</h2>
+      <div class="cards">
+        <div class="card c-blue"><span class="card-n">01</span><b>Secure Channel</b>
+          <p>AES-256-GCM envelope sealed on every inter-service hop.</p></div>
+        <div class="card c-cyan"><span class="card-n">02</span><b>Reverse Proxy</b>
+          <p>One public origin; the internal topology stays hidden.</p></div>
+        <div class="card c-green"><span class="card-n">03</span><b>Network Segmentation</b>
+          <p>Five isolated Docker networks, least privilege.</p></div>
+        <div class="card c-amber"><span class="card-n">04</span><b>Rate Limiting</b>
+          <p>Token-bucket throttle on the public endpoints.</p></div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- 9. SECURE CHANNEL -->
+  <section class="slide" data-kind="content" data-title="Secure Channel">
+    <div class="slide-inner"><div class="slide-body">
+      <span class="eyebrow">Scenario 1</span>
+      <h2>Secure Channel</h2>
+      <ul class="keypoints">
+        <li><b>Weakness</b> — internal Docker traffic flowed in plaintext; a compromised container could sniff tokens and conversations.</li>
+        <li><b>Countermeasure</b> — an AES-256-GCM envelope, sealed and opened inside each service's own code, not delegated to the infrastructure.</li>
+        <li><b>Result</b> — inter-service payloads travel as ciphertext end to end; a sniffer captures nothing readable.</li>
+      </ul>
+      <pre><code>pub fn seal(&amp;self, plaintext: &amp;[u8]) -&gt; Result&lt;Envelope, AppError&gt; {
+    let mut iv = [0u8; 12];
+    rand::thread_rng().fill_bytes(&amp;mut iv);
+    let ciphertext = self.cipher.encrypt(&amp;iv.into(), plaintext)?;
+    Ok(Envelope { iv, ciphertext })   // AES-256-GCM
+}</code></pre>
+    </div></div>
+  </section>
+
+  <!-- 10. REVERSE PROXY -->
+  <section class="slide" data-kind="content" data-title="Reverse Proxy">
+    <div class="slide-inner"><div class="slide-body">
+      <span class="eyebrow">Scenario 2</span>
+      <h2>Reverse Proxy</h2>
+      <figure class="media"><img src="images/image20.png" alt="Reverse proxy topology"></figure>
+      <ul class="keypoints cols-2">
+        <li><b>Weakness</b> — backend services were directly reachable; ports and topology exposed.</li>
+        <li><b>Countermeasure</b> — an NGINX reverse proxy as the single entry point on port 3000.</li>
+        <li><b>It hides</b> internal services, strips upstream headers and centralizes traffic control.</li>
+        <li><b>Result</b> — zero internal services exposed; one controlled public surface.</li>
+      </ul>
+    </div></div>
+  </section>
+
+  <!-- 11. NETWORK SEGMENTATION -->
+  <section class="slide" data-kind="content" data-title="Network Segmentation">
+    <div class="slide-inner"><div class="slide-body">
+      <span class="eyebrow">Scenario 3</span>
+      <h2>Network Segmentation</h2>
+      <figure class="media"><img src="images/image10.png" alt="Network segmentation zones"></figure>
+      <ul class="keypoints cols-2">
+        <li><b>Weakness</b> — a flat network: any compromised container could reach any database.</li>
+        <li><b>Countermeasure</b> — five Docker networks; each service joins only the ones it needs.</li>
+        <li><b>Databases isolated</b> — no host ports, invisible outside their owner's network.</li>
+        <li><b>Verified</b> — <code>nc -zv</code> probes: cross-zone DB connections fail with "bad address".</li>
+      </ul>
+    </div></div>
+  </section>
+
+  <!-- 12. RATE LIMITING -->
+  <section class="slide" data-kind="content" data-title="Rate Limiting">
+    <div class="slide-inner"><div class="slide-body">
+      <span class="eyebrow">Scenario 4 · team countermeasure</span>
+      <h2>Rate Limiting</h2>
+      <figure class="media"><img src="images/image2.png" alt="Token-bucket rate limiter"></figure>
+      <ul class="keypoints cols-2">
+        <li><b>Weakness</b> — public endpoints had no per-client limit: LLM-cost denial-of-wallet and login brute force.</li>
+        <li><b>Countermeasure</b> — a token-bucket limiter: <code>/v1/chat</code> per tenant, <code>/auth/login</code> per IP.</li>
+        <li><b>Over the limit</b> — HTTP 429 + <code>Retry-After</code>; every rejection sent to the audit log.</li>
+        <li><b>Tactics</b> — resist (limit access) · detect (audit) · recover (legit users keep service).</li>
+      </ul>
+    </div></div>
+  </section>
+
+  <!-- 13. PERFORMANCE -->
+  <section class="slide" data-kind="content" data-title="Performance &amp; Scalability">
+    <div class="slide-inner"><div class="slide-body">
+      <span class="eyebrow">04 · Quality Attributes</span>
+      <h2>Performance &amp; Scalability</h2>
+      <figure class="media"><img src="images/image14.png" alt="Performance curve, up to 2000 virtual users"></figure>
+      <ul class="keypoints cols-2">
+        <li><b>Staged load test</b> — k6, ramping to 2000 virtual users.</li>
+        <li><b>LLM isolated</b> — replaced by an 800 ms deterministic mock, so the test measures only internal overhead.</li>
+        <li><b>Stable to ~650 VUs</b> — flat ~800 ms latency, 0% errors; collapse near 1800 VUs.</li>
+        <li><b>Bottleneck</b> — the connection-pool layer between conversation-chat and its stores, not the LLM.</li>
+      </ul>
+    </div></div>
+  </section>
+
+  <!-- 14. RUN LOCALLY -->
+  <section class="slide" data-kind="content" data-title="Run it locally">
+    <div class="slide-inner"><div class="slide-body">
+      <span class="eyebrow">05 · Project</span>
+      <h2>Run it locally</h2>
+      <p>The whole platform boots from the <code>dev-runner</code> umbrella repo,
+      which pins every service as a git submodule. Requires Docker with the
+      Compose plugin.</p>
+      <pre><code># 1. Clone with submodules
+git clone --recurse-submodules git@github.com:UNagent-1D/dev-runner.git
+cd dev-runner
+
+# 2. Create the .env and fill in the API keys
+cp .env.example .env
+
+# 3. Build and run everything
+docker compose up -d --build
+
+# 4. First run only — seed the admin user
+docker compose run --rm -e SEED_EMAIL=admin@demo.com \
+  -e SEED_PASSWORD=demo1234 tenant ./seed</code></pre>
+      <p>Then sign in at <code>http://localhost:3000</code>.</p>
+    </div></div>
+  </section>
+
+  <!-- 15. CLOSING -->
+  <section class="slide" data-kind="closing" data-title="Thank you">
+    <div class="slide-inner"><div class="slide-body">
+      <img class="hero-logo small" src="images/image15.png" alt="UN Agent logo">
+      <h1>UN Agent</h1>
+      <p class="hero-sub">Asesores en Salud</p>
+      <p class="hero-line">A secure, multi-tenant conversational-AI platform.</p>
+      <p class="hero-meta">Team 1D · Software Architecture · 2026-I</p>
+    </div></div>
+  </section>
+
+</main>
+
+<nav class="controls">
+  <button class="nav-btn" id="prevBtn" aria-label="Previous slide">&larr;</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="nextBtn" aria-label="Next slide">&rarr;</button>
+</nav>
+
+<aside class="menu" id="menu" aria-hidden="true">
+  <div class="menu-head"><h2>Contents</h2>
+    <button class="icon-btn close" id="menuClose" aria-label="Close">&times;</button></div>
+  <ul class="menu-list" id="menuList"></ul>
+</aside>
+<div class="scrim" id="scrim"></div>
+
+<div class="hint" id="hint">Use &larr; &rarr; or swipe</div>
+
+<script src="script.js"></script>
+</body>
+</html>

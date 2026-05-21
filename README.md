@@ -6,10 +6,10 @@ document (Team 1D) in order. Light theme, animated, fully static.
 ## Contents
 
 ```
-index.html     the deck (all slides, generated from p3_1D.md)
-styles.css     light theme + animations
+index.html     the deck — 15 curated slides distilled from p3_1D.md
+styles.css     light theme + animations (system fonts, no CDN)
 script.js      slide-deck engine (vanilla JS, no dependencies)
-images/        the 20 diagrams / screenshots used in the deck
+images/        diagrams / screenshots (the deck uses the 9 most relevant)
 ```
 
 No build step, no `package.json`, no framework.
