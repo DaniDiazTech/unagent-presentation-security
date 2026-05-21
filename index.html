@@ -81,12 +81,30 @@
       <span class="eyebrow">Group 1D</span>
       <h2>The team</h2>
       <div class="team-grid">
-        <div class="team-card"><b>Juan David Loaiza Reyes</b><span>Orchestrator — chat-orch (Rust)</span></div>
-        <div class="team-card"><b>Víctor Daniel Díaz Reyes</b><span>Tenant (Go) · Compliance (Python)</span></div>
-        <div class="team-card"><b>Nicolás Zuluaga Galindo</b><span>Tenant Service (Go)</span></div>
-        <div class="team-card"><b>Manuel Eduardo Díaz Sabogal</b><span>Tenant &amp; Frontend (Go / TypeScript)</span></div>
-        <div class="team-card"><b>Daniel Libardo Díaz González</b><span>Conversation-Chat (Go) · Agent Runtime (TS)</span></div>
-        <div class="team-card"><b>Julián Andrés Vaquiro Moreno</b><span>Frontend (TypeScript) · Email Service (Java)</span></div>
+        <figure class="team-card">
+          <span class="team-photo-wrap"><img class="team-photo" src="images/loaiza.jpeg" alt="Juan David Loaiza Reyes"></span>
+          <figcaption><b>Juan David Loaiza Reyes</b><span>Orchestrator — chat-orch (Rust)</span></figcaption>
+        </figure>
+        <figure class="team-card">
+          <span class="team-photo-wrap"><img class="team-photo" src="images/victor.jpeg" alt="Víctor Daniel Díaz Reyes"></span>
+          <figcaption><b>Víctor Daniel Díaz Reyes</b><span>Tenant (Go) · Compliance (Python)</span></figcaption>
+        </figure>
+        <figure class="team-card">
+          <span class="team-photo-wrap"><img class="team-photo" src="images/nicolas.jpeg" alt="Nicolás Zuluaga Galindo"></span>
+          <figcaption><b>Nicolás Zuluaga Galindo</b><span>Tenant Service (Go)</span></figcaption>
+        </figure>
+        <figure class="team-card">
+          <span class="team-photo-wrap"><img class="team-photo" src="images/manuel.jpeg" alt="Manuel Eduardo Díaz Sabogal"></span>
+          <figcaption><b>Manuel Eduardo Díaz Sabogal</b><span>Tenant &amp; Frontend (Go / TypeScript)</span></figcaption>
+        </figure>
+        <figure class="team-card">
+          <span class="team-photo-wrap"><img class="team-photo" src="images/daniel.jpeg" alt="Daniel Libardo Díaz González"></span>
+          <figcaption><b>Daniel Libardo Díaz González</b><span>Conversation-Chat (Go) · Agent Runtime (TS)</span></figcaption>
+        </figure>
+        <figure class="team-card">
+          <span class="team-photo-wrap"><img class="team-photo" src="images/vaquiro.jpeg" alt="Julián Andrés Vaquiro Moreno"></span>
+          <figcaption><b>Julián Andrés Vaquiro Moreno</b><span>Frontend (TypeScript) · Email Service (Java)</span></figcaption>
+        </figure>
       </div>
     </div></div>
   </section>
@@ -179,11 +197,11 @@
         <li><b>Countermeasure</b> — an AES-256-GCM envelope, sealed and opened inside each service's own code, not delegated to the infrastructure.</li>
         <li><b>Result</b> — inter-service payloads travel as ciphertext end to end; a sniffer captures nothing readable.</li>
       </ul>
-      <pre><code>pub fn seal(&amp;self, plaintext: &amp;[u8]) -&gt; Result&lt;Envelope, AppError&gt; {
-    let mut iv = [0u8; 12];
-    rand::thread_rng().fill_bytes(&amp;mut iv);
-    let ciphertext = self.cipher.encrypt(&amp;iv.into(), plaintext)?;
-    Ok(Envelope { iv, ciphertext })   // AES-256-GCM
+      <pre><code class="rust"><span class="tok-kw">pub</span> <span class="tok-kw">fn</span> <span class="tok-fn">seal</span>(&amp;<span class="tok-kw">self</span>, plaintext: &amp;[<span class="tok-ty">u8</span>]) -&gt; <span class="tok-ty">Result</span>&lt;<span class="tok-ty">Envelope</span>, <span class="tok-ty">AppError</span>&gt; {
+    <span class="tok-kw">let</span> <span class="tok-kw">mut</span> iv = [<span class="tok-num">0u8</span>; <span class="tok-num">12</span>];
+    rand::<span class="tok-fn">thread_rng</span>().<span class="tok-fn">fill_bytes</span>(&amp;<span class="tok-kw">mut</span> iv);
+    <span class="tok-kw">let</span> ciphertext = <span class="tok-kw">self</span>.cipher.<span class="tok-fn">encrypt</span>(&amp;iv.<span class="tok-fn">into</span>(), plaintext)?;
+    <span class="tok-fn">Ok</span>(<span class="tok-ty">Envelope</span> { iv, ciphertext })   <span class="tok-com">// AES-256-GCM</span>
 }</code></pre>
     </div></div>
   </section>

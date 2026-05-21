@@ -132,25 +132,6 @@
     if (i !== current) go(i);
   });
 
-  /* ---- team avatars (initials derived from each name) ---- */
-  Array.prototype.forEach.call(
-    document.querySelectorAll(".team-card"), function (card) {
-      var b = card.querySelector("b");
-      if (!b) return;
-      var words = b.textContent.trim().split(/\s+/);
-      var initials = (words[0].charAt(0) +
-        (words.length > 1 ? words[words.length - 1].charAt(0) : ""))
-        .toUpperCase();
-      var av = document.createElement("span");
-      av.className = "avatar";
-      av.textContent = initials;
-      var txt = document.createElement("div");
-      txt.className = "tc-text";
-      while (card.firstChild) txt.appendChild(card.firstChild);
-      card.appendChild(av);
-      card.appendChild(txt);
-    });
-
   /* ---- image lightbox (click to open, click image to zoom) ---- */
   var lightbox  = document.getElementById("lightbox");
   var lightImg  = document.getElementById("lightboxImg");
