@@ -81,6 +81,10 @@
   nextBtn.addEventListener("click", next);
   prevBtn.addEventListener("click", prev);
   document.addEventListener("keydown", function (e) {
+    if (lightbox.classList.contains("open")) {
+      if (e.key === "Escape") closeLightbox();
+      return;
+    }
     if (menu.classList.contains("open")) {
       if (e.key === "Escape") closeMenu();
       return;
@@ -126,6 +130,55 @@
   window.addEventListener("hashchange", function () {
     var i = fromHash();
     if (i !== current) go(i);
+  });
+
+  /* ---- team avatars (initials derived from each name) ---- */
+  Array.prototype.forEach.call(
+    document.querySelectorAll(".team-card"), function (card) {
+      var b = card.querySelector("b");
+      if (!b) return;
+      var words = b.textContent.trim().split(/\s+/);
+      var initials = (words[0].charAt(0) +
+        (words.length > 1 ? words[words.length - 1].charAt(0) : ""))
+        .toUpperCase();
+      var av = document.createElement("span");
+      av.className = "avatar";
+      av.textContent = initials;
+      var txt = document.createElement("div");
+      txt.className = "tc-text";
+      while (card.firstChild) txt.appendChild(card.firstChild);
+      card.appendChild(av);
+      card.appendChild(txt);
+    });
+
+  /* ---- image lightbox (click to open, click image to zoom) ---- */
+  var lightbox  = document.getElementById("lightbox");
+  var lightImg  = document.getElementById("lightboxImg");
+  function openLightbox(src, alt) {
+    lightImg.src = src;
+    lightImg.alt = alt || "";
+    lightImg.classList.remove("zoomed");
+    lightbox.classList.add("open");
+    lightbox.setAttribute("aria-hidden", "false");
+  }
+  function closeLightbox() {
+    lightbox.classList.remove("open");
+    lightbox.setAttribute("aria-hidden", "true");
+    lightImg.classList.remove("zoomed");
+    lightImg.src = "";
+  }
+  deck.addEventListener("click", function (e) {
+    var img = e.target.closest ? e.target.closest(".media img") : null;
+    if (img) { openLightbox(img.src, img.alt); }
+  });
+  lightImg.addEventListener("click", function (e) {
+    e.stopPropagation();
+    lightImg.classList.toggle("zoomed");
+    lightbox.scrollTop = 0; lightbox.scrollLeft = 0;
+  });
+  lightbox.addEventListener("click", closeLightbox);
+  document.getElementById("lightboxClose").addEventListener("click", function (e) {
+    e.stopPropagation(); closeLightbox();
   });
 
   /* ---- start ---- */
