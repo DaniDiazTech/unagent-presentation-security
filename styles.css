@@ -372,7 +372,8 @@ body {
   .slide-inner { padding: 28px 20px 104px; }
   .slide-body h1 { font-size: 1.9rem; }
   .slide-body h2 { font-size: 1.5rem; }
-  .keypoints.cols-2, .cards, .team-grid { grid-template-columns: 1fr; }
+  .keypoints.cols-2, .cards, .team-grid,
+  .feature-cards { grid-template-columns: 1fr; }
   .media img { max-height: 38vh; }
   .dots { max-width: 42vw; }
   .brand span:last-child { display: none; }
@@ -408,3 +409,43 @@ body {
   z-index: 92; color: rgba(255,255,255,.72); font-size: 12.5px;
   background: rgba(255,255,255,.1); padding: 6px 15px; border-radius: 999px;
 }
+
+/* feature cards (slide 2 — "What is UN Agent") */
+.feature-cards {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px;
+}
+.feature-card {
+  display: flex; align-items: flex-start; gap: 14px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 16px; padding: 18px 20px; box-shadow: var(--shadow-sm);
+  transition: transform .25s cubic-bezier(.22,.61,.36,1),
+              box-shadow .25s, border-color .25s;
+}
+.feature-card:hover {
+  transform: translateY(-5px); box-shadow: var(--shadow-md);
+  border-color: rgba(79,70,229,.4);
+}
+.fc-icon {
+  flex: 0 0 44px; width: 44px; height: 44px; border-radius: 12px;
+  display: grid; place-items: center; color: #fff;
+  background: linear-gradient(135deg, var(--accent), #6366f1);
+  box-shadow: 0 6px 15px rgba(79,70,229,.34);
+}
+.fc-icon svg { width: 22px; height: 22px; }
+.feature-card:nth-child(2) .fc-icon {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  box-shadow: 0 6px 15px rgba(6,182,212,.34);
+}
+.feature-card:nth-child(3) .fc-icon {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  box-shadow: 0 6px 15px rgba(22,163,74,.34);
+}
+.feature-card:nth-child(4) .fc-icon {
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  box-shadow: 0 6px 15px rgba(217,119,6,.34);
+}
+.fc-text b { display: block; font-size: 1.04rem; color: var(--ink);
+  margin-bottom: 3px; }
+.fc-text p { margin: 0; font-size: 14px; line-height: 1.5;
+  color: var(--ink-soft); }
+.fc-text code { font-size: .85em; }
